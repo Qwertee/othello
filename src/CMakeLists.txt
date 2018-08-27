@@ -1,5 +1,6 @@
 set(SRC_FILES
   main.cpp
+  board.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

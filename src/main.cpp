@@ -1,6 +1,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <iostream>
+#include "board.h"
 
 const int FPS = 60;
 
@@ -13,6 +14,11 @@ int main () {
 
   if (!al_init()) {
     std::cout << "ERROR: couldn't initialize allegro..." << std::endl;
+    exit(-1);
+  }
+
+  if (!al_install_mouse()) {
+    std::cout << "ERROR: failed to initialize mouse..." << std::endl;
     exit(-1);
   }
 
@@ -40,6 +46,7 @@ int main () {
 
   al_register_event_source(event_queue, al_get_display_event_source(display));
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
+  al_register_event_source(event_queue, al_get_mouse_event_source());
 
   al_clear_to_color(al_map_rgb(0, 0, 0));
 
@@ -56,6 +63,13 @@ int main () {
     }
     else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
       running = false;
+    }
+
+    else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+      std::cout << "click!" << std::endl;
+    }
+    else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
+      std::cout << "release!" << std::endl;
     }
 
     if (redraw && al_is_event_queue_empty(event_queue)) {
