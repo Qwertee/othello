@@ -4,5 +4,6 @@
 
 typedef struct {
   ALLEGRO_DISPLAY *display;
-  int screen_width, screen_height;
+  int screen_width;
+  int screen_height;
 } display_state;

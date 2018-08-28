@@ -14,7 +14,7 @@ int main () {
   ALLEGRO_TIMER *timer = nullptr;
   bool running = true;
   bool redraw = false;
-  game g = game();
+  game *g;
 
   display_state *dstate = new display_state;
 
@@ -64,6 +64,8 @@ int main () {
   dstate->screen_height = SCREEN_HEIGHT;
   dstate->display = display;
 
+  g = new game(dstate);
+
   // start the main loop
   while(running) {
     ALLEGRO_EVENT event;
@@ -77,17 +79,17 @@ int main () {
     }
 
     else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-      std::cout << "click!" << std::endl;
     }
+
     else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-      g.process_click(event.mouse.x, event.mouse.y);
+      g->process_click(event.mouse.x, event.mouse.y);
     }
 
     if (redraw && al_is_event_queue_empty(event_queue)) {
       redraw = false;
       al_clear_to_color(al_map_rgb(117, 199, 255));
 
-      g.draw(dstate);
+      g->draw(dstate);
 
       al_flip_display();
     }

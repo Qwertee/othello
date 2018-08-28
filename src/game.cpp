@@ -1,8 +1,10 @@
 #include <iostream>
+#include <math.h>
 #include "game.h"
 
-game::game() {
+game::game(display_state * s) {
   brd = board();
+  this->dstate = s;
 
 }
 
@@ -56,12 +58,18 @@ void game::draw(display_state *state) {
 
 void game::process_click(int x, int y) {
   // need to determine which tile was click on.
-  std::cout << "click point: " << x << ", " << y << std::endl;
   struct position tile = get_tile_from_screen_pos(x, y);
+  // std::cout << "click point: " << tile.x << ", " << tile.y << std::endl;
 }
 
 struct game::position game::get_tile_from_screen_pos(int x, int y) {
   struct position pos;
+
+  int tilesX = dstate->screen_width / (BOARD_WIDTH + 2);
+  int tilesY = dstate->screen_height / (BOARD_HEIGHT + 2);
+
+  pos.x = static_cast<int>(floor((float)x / tilesX)) - 1;
+  pos.y = BOARD_HEIGHT - static_cast<int>(floor((float)y / tilesY));
 
   return pos;
 }
