@@ -1,9 +1,12 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <iostream>
-#include "board.h"
+#include "game.h"
+#include "display_state.h"
 
 const int FPS = 60;
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 1000;
 
 int main () {
   ALLEGRO_DISPLAY *display = nullptr;
@@ -11,6 +14,9 @@ int main () {
   ALLEGRO_TIMER *timer = nullptr;
   bool running = true;
   bool redraw = false;
+  game g = game();
+
+  display_state *dstate = new display_state;
 
   if (!al_init()) {
     std::cout << "ERROR: couldn't initialize allegro..." << std::endl;
@@ -28,7 +34,7 @@ int main () {
     exit(-1);
   }
 
-  display = al_create_display(800, 800);
+  display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
   if (!display) {
     std::cout << "ERROR: couldn't initialize display..." << std::endl;
     al_destroy_timer(timer);
@@ -53,6 +59,11 @@ int main () {
   al_flip_display();
   al_start_timer(timer);
 
+  // set up the display state
+  dstate->screen_width = SCREEN_WIDTH;
+  dstate->screen_height = SCREEN_HEIGHT;
+  dstate->display = display;
+
   // start the main loop
   while(running) {
     ALLEGRO_EVENT event;
@@ -69,12 +80,15 @@ int main () {
       std::cout << "click!" << std::endl;
     }
     else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-      std::cout << "release!" << std::endl;
+      g.process_click(event.mouse.x, event.mouse.y);
     }
 
     if (redraw && al_is_event_queue_empty(event_queue)) {
       redraw = false;
-      al_clear_to_color(al_map_rgb(0, 0, 0));
+      al_clear_to_color(al_map_rgb(117, 199, 255));
+
+      g.draw(dstate);
+
       al_flip_display();
     }
   }

@@ -1,7 +1,5 @@
 #include "board.h"
 
-// constexpr board::space_types default_board_state[BOARD_WIDTH][BOARD_HEIGHT];
-
 board::board() {
   load_default_board();
 

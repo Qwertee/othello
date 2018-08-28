@@ -17,6 +17,8 @@ public:
 
   bool place_move(int, int, space_types);
 
+  space_types board_array[BOARD_WIDTH][BOARD_HEIGHT];
+
 private:
   static constexpr space_types default_board_state[BOARD_WIDTH][BOARD_HEIGHT] =
     {
@@ -31,7 +33,6 @@ private:
 
     };
 
-  space_types board_array[BOARD_WIDTH][BOARD_HEIGHT];
 
   void load_default_board();
 };
