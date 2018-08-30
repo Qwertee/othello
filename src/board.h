@@ -4,15 +4,14 @@ const int BOARD_WIDTH = 8;
 const int BOARD_HEIGHT = 8;
 
 class board {
-
 public:
   board();
 
   enum space_types
     {
      EMPTY = 0,
-     PLAYER_1 = 1,
-     PLAYER_2 = 2
+     WHITE = 1,
+     BLACK = 2
     };
 
   bool place_move(int, int, space_types);
@@ -25,14 +24,12 @@ private:
      {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
      {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
      {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-     {EMPTY, EMPTY, EMPTY, PLAYER_1, PLAYER_2, EMPTY, EMPTY, EMPTY},
-     {EMPTY, EMPTY, EMPTY, PLAYER_2, PLAYER_1, EMPTY, EMPTY, EMPTY},
+     {EMPTY, EMPTY, EMPTY, WHITE, BLACK, EMPTY, EMPTY, EMPTY},
+     {EMPTY, EMPTY, EMPTY, BLACK, WHITE, EMPTY, EMPTY, EMPTY},
      {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
      {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
      {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-
     };
-
 
   void load_default_board();
 };

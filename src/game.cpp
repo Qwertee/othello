@@ -4,6 +4,7 @@
 
 game::game(display_state * s) {
   brd = board();
+  current_player = board::BLACK;
   this->dstate = s;
 
 }
@@ -33,7 +34,7 @@ void game::draw(display_state *state) {
 
       // check to see if a piece needs to be drawn
       switch (brd.board_array[x][y]) {
-      case board::PLAYER_1:
+      case board::WHITE:
         al_draw_filled_ellipse((tile_x1 + tile_x2) / 2,
                                (tile_y1 + tile_y2) / 2,
                                tile_width / 3,
@@ -42,7 +43,7 @@ void game::draw(display_state *state) {
         break;
 
 
-      case board::PLAYER_2:
+      case board::BLACK:
         al_draw_filled_ellipse((tile_x1 + tile_x2) / 2,
                                (tile_y1 + tile_y2) / 2,
                                tile_width / 3,
@@ -58,18 +59,38 @@ void game::draw(display_state *state) {
 
 void game::process_click(int x, int y) {
   // need to determine which tile was click on.
-  struct position tile = get_tile_from_screen_pos(x, y);
-  // std::cout << "click point: " << tile.x << ", " << tile.y << std::endl;
+  position *tile = get_tile_from_screen_pos(x, y);
+  if (tile == nullptr) {
+    return;
+  }
+  std::cout << "click point: " << tile->x << ", " << tile->y << std::endl;
+
+  // clicked a tile, process it!
+  process_move(tile);
+
+
+  // done with tile for this click
+  delete tile;
 }
 
-struct game::position game::get_tile_from_screen_pos(int x, int y) {
-  struct position pos;
+void game::process_move(game::position *tile) {
+
+}
+
+game::position* game::get_tile_from_screen_pos(int x, int y) {
+  position *pos = new position;
 
   int tilesX = dstate->screen_width / (BOARD_WIDTH + 2);
   int tilesY = dstate->screen_height / (BOARD_HEIGHT + 2);
 
-  pos.x = static_cast<int>(floor((float)x / tilesX)) - 1;
-  pos.y = BOARD_HEIGHT - static_cast<int>(floor((float)y / tilesY));
+  pos->x = static_cast<int>(floor((float)x / tilesX)) - 1;
+  pos->y = BOARD_HEIGHT - static_cast<int>(floor((float)y / tilesY));
+
+  // validate the calculations and return null if invalid coords are returned
+  if ((pos->x < 0 || pos->x >= BOARD_WIDTH) ||
+      (pos->y < 0 || pos->y >= BOARD_HEIGHT)) {
+    return nullptr;
+  }
 
   return pos;
 }
