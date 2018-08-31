@@ -14,7 +14,16 @@ void board::load_default_board() {
 }
 
 
-bool place_move(int x, int y, board::space_types current_player) {
+bool board::place_move(position *pos, space_types player) {
+  board_array[pos->x][pos->y] = player;
 
   return false;
+}
+
+space_types board::get_at_position(int x, int y) {
+  return board_array[x][y];
+}
+
+space_types board::get_at_position(position pos) {
+  return board_array[pos.x][pos.y];
 }

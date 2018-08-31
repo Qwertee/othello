@@ -1,22 +1,21 @@
 #pragma once
 
 #include "board.h"
+#include "position.h"
 #include "display_state.h"
 
 class game {
 private:
-  struct position {
-    int x;
-    int y;
-  };
-
   position* get_tile_from_screen_pos(int x, int y);
 
   board brd;
 
   display_state *dstate;
 
-  board::space_types current_player;
+  space_types current_player;
+
+  bool is_move_valid_helper(position *, int, int);
+  bool is_move_valid(position *);
 
 public:
   game(display_state *s);
