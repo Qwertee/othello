@@ -103,9 +103,6 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
     return false;
   }
 
-  // if (delta_x == 0) delta_x = BOARD_WIDTH + 1;
-  // if (delta_y == 0) delta_y = BOARD_HEIGHT + 1;
-
   bool matching = false;
   // need one loop
   int y = start_y; // initialize second loop variable
@@ -118,14 +115,25 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
     if (iterator_tile == current_player && !matching) {
       // ERROR - placed tile has a tile with matching color directly adjacent to it!
       return false;
-    } else if (iterator_tile == current_player && matching) {
+    }
+
+    else if (iterator_tile == current_player && matching) {
       // found the end of a chain - MATCH!
       return true;
-    } else if (iterator_tile == other_player) {
+    }
+
+    else if (iterator_tile == other_player) {
+      // currently looking at other color, keep searching...
       matching = true;
-    } else if (iterator_tile == EMPTY) {
+    }
+
+    else if (iterator_tile == EMPTY) {
+      // empty tile - BAD!
       return false;
-    } else {
+    }
+
+    else {
+      // everything else that may possibly happen can't get _good_, so fail
       return false;
     }
 
