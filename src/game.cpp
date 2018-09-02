@@ -148,34 +148,34 @@ bool game::is_move_valid(position *pos) {
   // space_types other_player = current_player == WHITE ? BLACK : WHITE;
 
   // need to check 8 directoions to determine whether the move is valid or not.
-  // TODO: stop after finding one move (since this is just to check whether it is valid or not)?
+  // TO// DO: stop after finding one move (since this is just to check whether it is valid or not)?
 
-  return
-    is_move_valid_helper(pos, 0, 1)   || // up
-    is_move_valid_helper(pos, 1, 1)   || // up right
-    is_move_valid_helper(pos, 1, 0)   || // right
-    is_move_valid_helper(pos, 1, -1)  || // down right
-    is_move_valid_helper(pos, 0, -1)  || // down
-    is_move_valid_helper(pos, -1, -1) || // down left
-    is_move_valid_helper(pos, -1, 0)  || // left
-    is_move_valid_helper(pos, -1, 1);    // upper left
+//   return
+//     is_move_valid_helper(pos, 0, 1)   || // up
+//     is_move_valid_helper(pos, 1, 1)   || // up right
+//     is_move_valid_helper(pos, 1, 0)   || // right
+//     is_move_valid_helper(pos, 1, -1)  || // down right
+//     is_move_valid_helper(pos, 0, -1)  || // down
+//     is_move_valid_helper(pos, -1, -1) || // down left
+//     is_move_valid_helper(pos, -1, 0)  || // left
+//     is_move_valid_helper(pos, -1, 1);    // upper left
 
-}
+// }
 
-position *game::get_tile_from_screen_pos(int x, int y) {
-  position *pos = new position;
+// position *game::get_tile_from_screen_pos(int x, int y) {
+//   position *pos = new position;
 
-  int tilesX = dstate->screen_width / (BOARD_WIDTH + 2);
-  int tilesY = dstate->screen_height / (BOARD_HEIGHT + 2);
+//   int tilesX = dstate->screen_width / (BOARD_WIDTH + 2);
+//   int tilesY = dstate->screen_height / (BOARD_HEIGHT + 2);
 
-  pos->x = static_cast<int>(floor((float)x / tilesX)) - 1;
-  pos->y = static_cast<int>(floor((float)y / tilesY)) - 1;
+//   pos->x = static_cast<int>(floor((float)x / tilesX)) - 1;
+//   pos->y = static_cast<int>(floor((float)y / tilesY)) - 1;
 
-  // validate the calculations and return null if invalid coords are returned
-  if ((pos->x < 0 || pos->x >= BOARD_WIDTH) ||
-      (pos->y < 0 || pos->y >= BOARD_HEIGHT)) {
-    return nullptr;
-  }
+//   // validate the calculations and return null if invalid coords are returned
+//   if ((pos->x < 0 || pos->x >= BOARD_WIDTH) ||
+//       (pos->y < 0 || pos->y >= BOARD_HEIGHT)) {
+//     return nullptr;
+//   }
 
-  return pos;
-}
+//   return pos;
+// }
