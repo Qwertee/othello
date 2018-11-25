@@ -1,12 +1,12 @@
 #pragma once
 
 #include "board.h"
-#include "position.h"
 #include "display_state.h"
+#include "position.h"
 
 class game {
 private:
-  position* get_tile_from_screen_pos(int x, int y);
+  position *get_tile_from_screen_pos(int x, int y);
 
   board brd;
 
@@ -21,7 +21,5 @@ public:
   game(display_state *s);
   void draw(display_state *);
   void process_click(int, int);
-  void process_move(position*);
-
-
+  void process_move(position *);
 };

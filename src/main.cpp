@@ -1,14 +1,14 @@
+#include "display_state.h"
+#include "game.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <iostream>
-#include "game.h"
-#include "display_state.h"
 
 const int FPS = 60;
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 1000;
 
-int main () {
+int main() {
   ALLEGRO_DISPLAY *display = nullptr;
   ALLEGRO_EVENT_QUEUE *event_queue = nullptr;
   ALLEGRO_TIMER *timer = nullptr;
@@ -67,14 +67,13 @@ int main () {
   g = new game(dstate);
 
   // start the main loop
-  while(running) {
+  while (running) {
     ALLEGRO_EVENT event;
     al_wait_for_event(event_queue, &event);
 
     if (event.type == ALLEGRO_EVENT_TIMER) {
       redraw = true;
-    }
-    else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+    } else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
       running = false;
     }
 
