@@ -118,6 +118,10 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
         else if (iterator_tile == other_player) {
             // currently looking at other color, keep searching...
             matching = true;
+            position p;
+            p.x = x;
+            p.y = y;
+            brd.place_move(&p, current_player);
         }
 
         else if (iterator_tile == EMPTY) {
@@ -137,21 +141,29 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
     return false;
 }
 
+
+// returns false if given position is an invalid move for the current player.
+// returns true if the move is possible and flips the appropriate tiles to the opposing color.
 bool game::is_move_valid(position *pos) {
-    // do some sick shit here...
-    // space_types other_player = current_player == WHITE ? BLACK : WHITE;
+    // keep backup incase move is invalid
+    board board_backup = board(brd);
 
     // need to check 8 directoions to determine whether the move is valid or not.
-    // TODO: stop after finding one move (since this is just to check whether it is valid or not)?
+    bool result = is_move_valid_helper(pos, 0, 1) ||   // up
+                  is_move_valid_helper(pos, 1, 1) ||   // up right
+                  is_move_valid_helper(pos, 1, 0) ||   // right
+                  is_move_valid_helper(pos, 1, -1) ||  // down right
+                  is_move_valid_helper(pos, 0, -1) ||  // down
+                  is_move_valid_helper(pos, -1, -1) || // down left
+                  is_move_valid_helper(pos, -1, 0) ||  // left
+                  is_move_valid_helper(pos, -1, 1);    // upper left
 
-    return is_move_valid_helper(pos, 0, 1) ||   // up
-           is_move_valid_helper(pos, 1, 1) ||   // up right
-           is_move_valid_helper(pos, 1, 0) ||   // right
-           is_move_valid_helper(pos, 1, -1) ||  // down right
-           is_move_valid_helper(pos, 0, -1) ||  // down
-           is_move_valid_helper(pos, -1, -1) || // down left
-           is_move_valid_helper(pos, -1, 0) ||  // left
-           is_move_valid_helper(pos, -1, 1);    // upper left
+    if (result == false) {
+        // don't keep modifications when move is invalid
+        brd = board_backup;
+    }
+
+    return result;
 }
 
 position *game::get_tile_from_screen_pos(int x, int y) {

@@ -9,6 +9,7 @@ const int BOARD_HEIGHT = 8;
 class board {
   public:
     board();
+    board(board&);
 
     bool place_move(position *, space_types);
     space_types get_at_position(position);
