@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <list>
 #include <math.h>
 
 game::game(display_state *s) {
@@ -69,7 +70,6 @@ void game::process_click(int x, int y) {
 void game::process_move(position *pos) {
     // check if the tile is empty in the first place
     if (brd.get_at_position(*pos) != EMPTY) {
-        std::cout << "clicked tile not empty" << std::endl;
         return;
     }
 
@@ -97,6 +97,8 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
         return false;
     }
 
+    std::list<position> to_flip = std::list<position>();
+
     bool matching = false;
     // need one loop
     int y = start_y; // initialize second loop variable
@@ -112,6 +114,10 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
 
         else if (iterator_tile == current_player && matching) {
             // found the end of a chain - MATCH!
+            // flip tiles that were found while matching.
+            for (position p : to_flip) {
+                brd.place_move(&p, current_player);
+            }
             return true;
         }
 
@@ -121,7 +127,7 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
             position p;
             p.x = x;
             p.y = y;
-            brd.place_move(&p, current_player);
+            to_flip.push_front(p);
         }
 
         else if (iterator_tile == EMPTY) {
@@ -141,7 +147,6 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
     return false;
 }
 
-
 // returns false if given position is an invalid move for the current player.
 // returns true if the move is possible and flips the appropriate tiles to the opposing color.
 bool game::is_move_valid(position *pos) {
@@ -149,14 +154,20 @@ bool game::is_move_valid(position *pos) {
     board board_backup = board(brd);
 
     // need to check 8 directoions to determine whether the move is valid or not.
-    bool result = is_move_valid_helper(pos, 0, 1) ||   // up
-                  is_move_valid_helper(pos, 1, 1) ||   // up right
-                  is_move_valid_helper(pos, 1, 0) ||   // right
-                  is_move_valid_helper(pos, 1, -1) ||  // down right
-                  is_move_valid_helper(pos, 0, -1) ||  // down
-                  is_move_valid_helper(pos, -1, -1) || // down left
-                  is_move_valid_helper(pos, -1, 0) ||  // left
-                  is_move_valid_helper(pos, -1, 1);    // upper left
+    // has to be written like this to avoid short-circuit evaluation.
+    // (we want ALL conditions to evaluate, chained ORs would stop evaluation on the
+    // first TRUE result found and may not flip all necessary tiles)
+
+    // there has GOT to be a better way to do this...
+    bool u = is_move_valid_helper(pos, 0, 1);    // up
+    bool ur = is_move_valid_helper(pos, 1, 1);   // up right
+    bool r = is_move_valid_helper(pos, 1, 0);    // right
+    bool dr = is_move_valid_helper(pos, 1, -1);  // down right
+    bool d = is_move_valid_helper(pos, 0, -1);   // down
+    bool dl = is_move_valid_helper(pos, -1, -1); // down left
+    bool l = is_move_valid_helper(pos, -1, 0);   // left
+    bool ul = is_move_valid_helper(pos, -1, 1);  // upper left
+    bool result = u || ur || r || dr || d || dl || l || ul;
 
     if (result == false) {
         // don't keep modifications when move is invalid
