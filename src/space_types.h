@@ -1,8 +1,3 @@
 #pragma once
 
-enum space_types
-  {
-   EMPTY = 0,
-   WHITE = 1,
-   BLACK = 2
-  };
+enum space_types { EMPTY = 0, WHITE = 1, BLACK = 2 };

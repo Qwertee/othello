@@ -3,7 +3,7 @@
 #include <allegro5/allegro_primitives.h>
 
 typedef struct {
-  ALLEGRO_DISPLAY *display;
-  int screen_width;
-  int screen_height;
+    ALLEGRO_DISPLAY *display;
+    int screen_width;
+    int screen_height;
 } display_state;
