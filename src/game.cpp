@@ -19,6 +19,13 @@ void game::draw(display_state *state) {
     float tile_width = state->screen_width / display_grid_width;
     float tile_height = state->screen_height / display_grid_height;
 
+    // draw the current player's color to the screen so players can tell who is going
+    ALLEGRO_COLOR player_color =
+        current_player == WHITE ? al_map_rgb(255, 255, 255) : al_map_rgb(0, 0, 0);
+
+    al_draw_filled_ellipse(tile_width / 2, tile_height / 2, tile_width / 3,
+                           tile_height / 3, player_color);
+
     for (int x = 0; x < BOARD_WIDTH; x++)
         for (int y = 0; y < BOARD_HEIGHT; y++) {
 
@@ -29,21 +36,25 @@ void game::draw(display_state *state) {
             float tile_y2 = tile_y1 + tile_height;
 
             // need to draw the background tile for every square
-            al_draw_filled_rectangle(tile_x1, tile_y1, tile_x2, tile_y2, al_map_rgb(0, 255, 0));
+            al_draw_filled_rectangle(tile_x1, tile_y1, tile_x2, tile_y2,
+                                     al_map_rgb(0, 255, 0));
 
             // switch y1 and y2 to prevent boarder from being drawn 'inside out'
-            al_draw_rectangle(tile_x1, tile_y1, tile_x2, tile_y2, al_map_rgb(0, 0, 0), 10);
+            al_draw_rectangle(tile_x1, tile_y1, tile_x2, tile_y2, al_map_rgb(0, 0, 0),
+                              10);
 
             // check to see if a piece needs to be drawn
             switch (brd.get_at_position(x, y)) {
             case BLACK:
                 al_draw_filled_ellipse((tile_x1 + tile_x2) / 2, (tile_y1 + tile_y2) / 2,
-                                       tile_width / 3, tile_height / 3, al_map_rgb(0, 0, 0));
+                                       tile_width / 3, tile_height / 3,
+                                       al_map_rgb(0, 0, 0));
                 break;
 
             case WHITE:
                 al_draw_filled_ellipse((tile_x1 + tile_x2) / 2, (tile_y1 + tile_y2) / 2,
-                                       tile_width / 3, tile_height / 3, al_map_rgb(255, 255, 255));
+                                       tile_width / 3, tile_height / 3,
+                                       al_map_rgb(255, 255, 255));
                 break;
 
             default:
@@ -102,7 +113,8 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
     bool matching = false;
     // need one loop
     int y = start_y; // initialize second loop variable
-    for (int x = start_x; x < BOARD_WIDTH && x >= 0 && y < BOARD_HEIGHT && y >= 0; x += delta_x) {
+    for (int x = start_x; x < BOARD_WIDTH && x >= 0 && y < BOARD_HEIGHT && y >= 0;
+         x += delta_x) {
 
         space_types iterator_tile = brd.get_at_position(x, y);
 
@@ -148,7 +160,8 @@ bool game::is_move_valid_helper(position *pos, int delta_x, int delta_y) {
 }
 
 // returns false if given position is an invalid move for the current player.
-// returns true if the move is possible and flips the appropriate tiles to the opposing color.
+// returns true if the move is possible and flips the appropriate tiles to the opposing
+// color.
 bool game::is_move_valid(position *pos) {
     // keep backup incase move is invalid
     board board_backup = board(brd);
