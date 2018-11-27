@@ -2,11 +2,16 @@
 #include <iostream>
 #include <list>
 #include <math.h>
+#include "colors.h"
 
 game::game(display_state *s) {
     brd = board();
     current_player = BLACK;
     this->dstate = s;
+}
+
+void game::draw_piece(float x, float y, float radius, ALLEGRO_COLOR color) {
+    al_draw_filled_ellipse(x, y, radius, radius, color);
 }
 
 void game::draw(display_state *state) {
@@ -19,12 +24,13 @@ void game::draw(display_state *state) {
     float tile_width = state->screen_width / display_grid_width;
     float tile_height = state->screen_height / display_grid_height;
 
+    float piece_radius = std::min(tile_width, tile_height) / 3;
+
     // draw the current player's color to the screen so players can tell who is going
     ALLEGRO_COLOR player_color =
-        current_player == WHITE ? al_map_rgb(255, 255, 255) : al_map_rgb(0, 0, 0);
+        current_player == WHITE ? colors::WHITE : colors::BLACK;
 
-    al_draw_filled_ellipse(tile_width / 2, tile_height / 2, tile_width / 3,
-                           tile_height / 3, player_color);
+    draw_piece(tile_width / 2, tile_height / 2, piece_radius, player_color);
 
     for (int x = 0; x < BOARD_WIDTH; x++)
         for (int y = 0; y < BOARD_HEIGHT; y++) {
@@ -35,26 +41,25 @@ void game::draw(display_state *state) {
             float tile_x2 = tile_x1 + tile_width;
             float tile_y2 = tile_y1 + tile_height;
 
+            float tile_center_x = (tile_x1 + tile_x2) / 2;
+            float tile_center_y = (tile_y1 + tile_y2) / 2;
+
             // need to draw the background tile for every square
             al_draw_filled_rectangle(tile_x1, tile_y1, tile_x2, tile_y2,
                                      al_map_rgb(0, 255, 0));
 
             // switch y1 and y2 to prevent boarder from being drawn 'inside out'
-            al_draw_rectangle(tile_x1, tile_y1, tile_x2, tile_y2, al_map_rgb(0, 0, 0),
-                              10);
+            al_draw_rectangle(tile_x1, tile_y1, tile_x2, tile_y2, colors::BLACK, 10);
 
             // check to see if a piece needs to be drawn
             switch (brd.get_at_position(x, y)) {
             case BLACK:
-                al_draw_filled_ellipse((tile_x1 + tile_x2) / 2, (tile_y1 + tile_y2) / 2,
-                                       tile_width / 3, tile_height / 3,
-                                       al_map_rgb(0, 0, 0));
+                draw_piece(tile_center_x, tile_center_y, piece_radius, colors::BLACK);
                 break;
 
             case WHITE:
-                al_draw_filled_ellipse((tile_x1 + tile_x2) / 2, (tile_y1 + tile_y2) / 2,
-                                       tile_width / 3, tile_height / 3,
-                                       al_map_rgb(255, 255, 255));
+                draw_piece(tile_center_x, tile_center_y, piece_radius, colors::WHITE);
+
                 break;
 
             default:

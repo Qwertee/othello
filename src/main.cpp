@@ -1,4 +1,5 @@
 #include "display_state.h"
+#include "colors.h"
 #include "game.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -64,6 +65,7 @@ int main() {
     dstate->screen_height = SCREEN_HEIGHT;
     dstate->display = display;
 
+    colors::load_colors();
     g = new game(dstate);
 
     // start the main loop

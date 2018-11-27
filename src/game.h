@@ -17,6 +17,8 @@ class game {
     bool is_move_valid_helper(position *, int, int);
     bool is_move_valid(position *);
 
+    void draw_piece(float, float, float, ALLEGRO_COLOR);
+
   public:
     game(display_state *s);
     void draw(display_state *);
